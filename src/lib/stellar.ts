@@ -116,6 +116,35 @@ export function updateCustomNetworkConfig(config: Partial<NetworkConfig>) {
   Object.assign(NETWORKS.custom, config)
 }
 
+/**
+ * Switch to a custom network profile (Issue #188).
+ * Updates NETWORKS.custom with profile data and creates new clients.
+ */
+export async function switchToCustomProfile(profileId: string): Promise<void> {
+  const { getNetworkProfile } = await import('./userPreferences')
+  const profile = await getNetworkProfile(profileId)
+  
+  if (!profile) {
+    throw new Error(`Network profile "${profileId}" not found`)
+  }
+  
+  // Update the custom network config
+  updateCustomNetworkConfig({
+    name: profile.name,
+    horizonUrl: profile.horizonUrl,
+    sorobanUrl: profile.sorobanUrl,
+    passphrase: profile.passphrase,
+  })
+}
+
+/**
+ * Load profiles from storage and return them (Issue #188).
+ */
+export async function loadCustomNetworkProfiles() {
+  const { loadNetworkProfiles } = await import('./userPreferences')
+  return loadNetworkProfiles()
+}
+
 export function getServer(network: NetworkName = 'testnet'): StellarSdk.Horizon.Server {
   const config = NETWORKS[network]
   return new StellarSdk.Horizon.Server(config.horizonUrl || NETWORKS.testnet.horizonUrl)
@@ -1746,6 +1775,8 @@ export default {
   NETWORKS,
   getNetworkDetails,
   updateCustomNetworkConfig,
+  switchToCustomProfile,
+  loadCustomNetworkProfiles,
   getServer,
   getSorobanServer,
   fetchAccount,
