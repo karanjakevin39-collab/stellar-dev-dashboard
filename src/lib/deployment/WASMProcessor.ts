@@ -1,4 +1,10 @@
 import { xdr } from '@stellar/stellar-sdk';
+
+export interface ScValType {
+  type: 'int' | 'bool' | 'string' | 'address' | 'bytes' | 'vec' | 'map';
+  value: any;
+}
+
 export class WASMProcessor {
   static async parseFile(file) {
     return new Uint8Array(await file.arrayBuffer());
