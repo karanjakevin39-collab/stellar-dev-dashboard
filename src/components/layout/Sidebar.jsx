@@ -32,7 +32,12 @@ const NAV_ITEMS = [
   { id: 'txSimulator', label: 'Simulator', icon: '▷' },
   { id: 'advancedSim', label: 'Advanced Sim', icon: '⚡' },
   { id: 'faucet', label: 'Faucet', icon: '⬡' },
-
+  
+  { type: 'header', label: 'EXPLORE' },
+  { id: 'dex', label: 'DEX', icon: '⇌' },
+  { id: 'pathExplorer', label: 'Path Explorer', icon: '⇢' },
+  { id: 'explorers', label: 'Explorer Links', icon: '⊞' },
+  
   { type: 'header', label: 'TOOLS' },
   { id: 'wallet', label: 'Wallet', icon: '⊡' },
   { id: 'signer', label: 'Signer', icon: '✎' },

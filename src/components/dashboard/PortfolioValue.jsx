@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useStore } from '../../lib/store';
-import { fetchPrices, refreshPrices, calculatePortfolioValue } from '../../lib/priceFeed';
-import { ee } from '../../lib/stellar';
+import React, { useEffect, useMemo, useState } from 'react'
+import { useStore } from '../../lib/store'
+import { fetchPrices, calculatePortfolioValue } from '../../lib/priceFeed'
+import { getServer } from '../../lib/stellar'
 import {
   calculateAssetAllocation,
   calculateDiversificationScore,
@@ -148,26 +148,16 @@ export default function PortfolioValue() {
     const loadHistory = async () => {
       setHistoryLoading(true);
       try {
-        const currentBalancesMap = {};
-        portfolio.items.forEach((item) => {
-          currentBalancesMap[item.code] = item.amount;
-        });
+        const currentBalancesMap = {}
+        portfolio.items.forEach(item => { currentBalancesMap[item.code] = item.amount })
 
-        const server = ee(network);
-        const history = await fetchHistoricalPerformance(
-          server,
-          connectedAddress,
-          currentBalancesMap,
-          30
-        );
-
-        if (!cancelled) setHistoricalData(history);
-      } catch (err) {
-        console.error('History load failed', err);
-      } finally {
-        if (!cancelled) setHistoryLoading(false);
-      }
-    };
+        const server = getServer(network)
+        const history = await fetchHistoricalPerformance(server, connectedAddress, currentBalancesMap, 30)
+        
+        if (!cancelled) setHistoricalData(history)
+      } catch (err) { console.error('History load failed', err) }
+      finally { if (!cancelled) setHistoryLoading(false) }
+    }
 
     loadHistory();
     return () => {
